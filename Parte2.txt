@@ -1,0 +1,4 @@
+El trabajo de investigación consiste en analizar distintas estrategias de apuestas 
+para el juego de la ruleta, empleando como base las técnicas y el modelo empleado en el trabajo anterior. 
+Se debe de entregar un documento PDF (creado con Latex) y el código en Python 3.x. 
+Ver el PDF con los detalles del mismo.

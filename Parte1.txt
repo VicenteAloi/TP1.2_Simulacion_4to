@@ -1,0 +1,7 @@
+Trabajo de investigación sobre la simulación de una ruleta. 
+Se debe considerar los valores obtenidos al azar para ser analizados y concluir. 
+Se debe de entregar un documento en formato PDF y el código en Python 3.x separados. 
+Ver el PDF con los detalles del mismo.
+
+Entregar 1 trabajo por grupo. 
+Poner también en los comentarios los integrantes del grupo.
