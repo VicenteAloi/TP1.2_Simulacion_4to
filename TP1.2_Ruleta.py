@@ -15,6 +15,7 @@ estrategia = str(sys.argv[8])
 tipo_capital = str(sys.argv[10])
 capital_Inicial=50000
 capital=[]
+flag=False
 x = list(range(0,cant_tiradas))
 apuesta_min=100
 rojo=[1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
@@ -59,7 +60,7 @@ def martingala():
               if(num_elegido.__class__==int):
                 if rdo_tiradas[j][i] == num_elegido:                  
                     if(i>0):
-                      capital[j].append(capital[j][i-1] + apuesta_min_m*36)
+                      capital[j].append(capital[j][i-1] + apuesta_min_m*35)
                     apuesta_min_m=apuesta_min
                 else:
                     if(i>0): 
@@ -72,7 +73,7 @@ def martingala():
                     elegido=negro
                 if rdo_tiradas[j][i] in elegido: 
                     if(i>0):  
-                      capital[j].append(capital[j][i-1] + apuesta_min_m*2)
+                      capital[j].append(capital[j][i-1] + apuesta_min_m)
                     apuesta_min_m=apuesta_min
                 else: 
                     if(i>0): 
@@ -121,74 +122,96 @@ def dAlambert():
                       apuesta_min_d=apuesta_min_d+1
         print(capital,num_elegido)
 
+def asignarApuestaF(apuesta_min,apuesta_min_Act,apuesta_min_Ant,flag):
+  if(flag):
+    apuesta_min=apuesta_min_Act-apuesta_min_Ant
+    apuesta_min_Act=apuesta_min
+    apuesta_min_Ant=apuesta_min_Ant-apuesta_min
+  else:
+    apuesta_min=apuesta_min_Act+apuesta_min_Ant
+    apuesta_min_Ant = apuesta_min_Act
+    apuesta_min_Act = apuesta_min
+
+
+def asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,flag):
+      if(flag):
+        apuesta_min=apuesta_min_Act-apuesta_min_Ant
+        apuesta_min_Act=apuesta_min
+        apuesta_min_Ant=apuesta_min_Ant-apuesta_min
+      else:
+        apuesta_min=apuesta_min_Act+apuesta_min_Ant
+        apuesta_min_Ant = apuesta_min_Act
+        apuesta_min_Act = apuesta_min
+      return apuesta_min, apuesta_min_Ant, apuesta_min_Act
+
 def fibonacci():
     rdo_tiradas = []
     aux_prom_tiradas = []
     prom_tiradas = []
-
-
+    apuesta_min=1
+    apuesta_min_Act=1
+    apuesta_min_Ant=0
+    
+    print(len(x)-1)
     for j in range(0,cant_corridas):
+
         rdo_tiradas.append([0.0])
         prom_tiradas.append([0.0])
         aux_prom_tiradas.append(0)
-        capital.append([50000])
+        capital.append([5000])
         apuesta_min=1
         apuesta_min_Act=1
+
         apuesta_min_Ant=0
 
-        for i in x:
+        for i in range(0,len(x)-1):
             #genera num random y lo guarda en el array
             rdo_tiradas[j].append(random.randint(0,36))
-            #suma valores al aux promedio
-            aux_prom_tiradas[j] += rdo_tiradas[j][i]
-            #si el resultado es igual al numero elegido, suma refuencia abs del mismo
-
-            if(num_elegido.__class__ == int):
-              if (rdo_tiradas[j][i] == num_elegido and i>0): 
-                    capital[j].append(capital[j][i-1]+apuesta_min*35) 
-                    apuesta_min=apuesta_min_Act-apuesta_min_Ant
-                    apuesta_min_Act=apuesta_min
-                    apuesta_min_Ant=apuesta_min_Ant-apuesta_min
-              elif(rdo_tiradas[j][i] != num_elegido and i>0): 
-                  capital[j].append(capital[j][i-1]-apuesta_min) 
-                  apuesta_min=apuesta_min_Act+apuesta_min_Ant
-                  apuesta_min_Ant = apuesta_min_Act
-                  apuesta_min_Act = apuesta_min
-              elif(rdo_tiradas[j][i] == num_elegido and i==0):
-                  capital[j].append(capital[j][i-1]+apuesta_min*35) 
-                  apuesta_min=apuesta_min_Act-apuesta_min_Ant
-                  apuesta_min_Act=apuesta_min
-                  apuesta_min_Ant=apuesta_min_Ant-apuesta_min
-              elif(rdo_tiradas[j][i] != num_elegido and i==0):
-                  apuesta_min=apuesta_min_Act+apuesta_min_Ant
-                  apuesta_min_Ant = apuesta_min_Act
-                  apuesta_min_Act = apuesta_min
+            if((tipo_capital=='f' and capital[j][i] > apuesta_min) or tipo_capital=='i'):
+              if(num_elegido.__class__ == int):
+                if (rdo_tiradas[j][i] == num_elegido): 
+                      capital[j].append(capital[j][i]+apuesta_min*35) 
+                      apuesta_min, apuesta_min_Ant, apuesta_min_Act = asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,True)
+                      # apuesta_min=apuesta_min_Act-apuesta_min_Ant
+                      # apuesta_min_Act=apuesta_min
+                      # apuesta_min_Ant=apuesta_min_Ant-apuesta_min
+                elif(rdo_tiradas[j][i] != num_elegido): 
+                    capital[j].append(capital[j][i]-apuesta_min) 
+                    apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,False)
+                    # apuesta_min=apuesta_min_Act+apuesta_min_Ant
+                    # apuesta_min_Ant = apuesta_min_Act
+                    # apuesta_min_Act = apuesta_min
+                # elif(rdo_tiradas[j][i] == num_elegido and i==0):
+                #     capital[j].append(capital[j][i-1]+apuesta_min*35) 
+                #     apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,True)                 
+                # elif(rdo_tiradas[j][i] != num_elegido and i==0):
+                #     capital[j].append(capital[j][i]-apuesta_min) 
+                #     print("Llegue")
+                #     apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,False)                  
+              else:
+                  if(num_elegido=='r'):
+                    elegido=rojo
+                  else:
+                    elegido=negro
+                  if (rdo_tiradas[j][i] in elegido): 
+                    capital[j].append(capital[j][i]+apuesta_min) 
+                    if(apuesta_min_Act!=1 and apuesta_min_Ant!=0):
+                      apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,True)     
+                  elif(rdo_tiradas[j][i] not in elegido): 
+                    capital[j].append(capital[j][i]-apuesta_min)
+                    apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,False)
+                         
+                  # elif(rdo_tiradas[j][i] in elegido and i==0):
+                  #   capital[j].append(capital[j][i-1]+apuesta_min) 
+                  #   if(apuesta_min_Act!=1 and apuesta_min_Ant!=0):
+                  #     apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,True)  
+                  # elif(rdo_tiradas[j][i] not in elegido and i==0):
+                  #   capital[j].append(capital[j][i]-apuesta_min) 
+                  #   apuesta_min, apuesta_min_Ant, apuesta_min_Act =asignarApuestaF(apuesta_min, apuesta_min_Ant, apuesta_min_Act,False)
             else:
-                if(num_elegido=='r'):
-                  elegido=rojo
-                else:
-                  elegido=negro
-                if (rdo_tiradas[j][i] in elegido and i>0): 
-                  capital[j].append(capital[j][i-1]+apuesta_min) 
-                  if(apuesta_min_Act!=1 and apuesta_min_Ant!=0):
-                    apuesta_min=apuesta_min_Act-apuesta_min_Ant
-                    apuesta_min_Act=apuesta_min
-                    apuesta_min_Ant=apuesta_min_Ant-apuesta_min
-                elif(rdo_tiradas[j][i] not in elegido and i>0): 
-                  capital[j].append(capital[j][i-1]-apuesta_min) 
-                  apuesta_min=apuesta_min_Act+apuesta_min_Ant
-                  apuesta_min_Ant = apuesta_min_Act
-                  apuesta_min_Act = apuesta_min
-                elif(rdo_tiradas[j][i] in elegido and i==0):
-                  capital[j].append(capital[j][i-1]+apuesta_min) 
-                  if(apuesta_min_Act!=1 and apuesta_min_Ant!=0):
-                    apuesta_min=apuesta_min_Act-apuesta_min_Ant
-                    apuesta_min_Act=apuesta_min
-                    apuesta_min_Ant=apuesta_min_Ant-apuesta_min
-                elif(rdo_tiradas[j][i] not in elegido and i==0):
-                  apuesta_min=apuesta_min_Act+apuesta_min_Ant
-                  apuesta_min_Ant = apuesta_min_Act
-                  apuesta_min_Act = apuesta_min
+               capital[j].append(capital[j][i])
+               print("Quebro en",capital[j][i], "Apuesta minima ",apuesta_min)
+        print(capital)
 
 def oscarsGrind():
     rdo_tiradas = []
@@ -256,21 +279,20 @@ elif(estrategia=='o'):
    oscarsGrind()
 
 fig, axs1 = plt.subplots(2,figsize=(10,6))
+nGrafica = random.randint(0,cant_corridas-1)
 
-axs1[1].axhline(50000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
 # axs1[1].axhline(0, color='black', linestyle=':',linewidth=1, label='Quiebra')
-axs1[1].plot(x,capital[0],label='Flujo de Capital')
-axs1[1].legend(loc='lower right')
-axs1[1].set_title('Gráfico 1: Flujo de Capital')
+axs1[1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
+axs1[1].plot(x,capital[nGrafica])
+# axs2[1].legend(loc='lower right')
+axs1[1].set_title('Gráfico Flujo de Capital Tirada: '+str(nGrafica+1))
 axs1[1].set_xlabel('Num tiradas')
 axs1[1].set_ylabel('Cantidad de capital')
-# axs1[1].set_ylim([-500000, 500000])
 
 fig2, axs2 = plt.subplots(2, figsize=(10,6))
 for i in range(0,cant_corridas):
-    axs2[1].plot(x,capital[i])
-    axs2[1].axhline(50000, color='red', linestyle='--', linewidth=1, label='Valor Teórico Esperado')
-    # axs2[1].legend(loc='lower right')
+    axs2[1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Valor Teórico Esperado')
+    axs2[1].plot(x,capital[i])    
     axs2[1].set_title('Gráfico 1: Flujo de Capital')
     axs2[1].set_xlabel('Num tiradas')
     axs2[1].set_ylabel('Cantidad de capital')
