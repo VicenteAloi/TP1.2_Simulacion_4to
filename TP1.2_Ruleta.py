@@ -110,7 +110,7 @@ def dAlambert():
                   frec_rel_elegido[j].append(frec_abs_elegido[j]/i)
                   if(num_elegido.__class__==int):
                     if rdo_tiradas[j][i] == num_elegido:                  
-                        capital[j].append(capital[j][i-1] - apuesta_min_d*35)
+                        capital[j].append(capital[j][i-1] + apuesta_min_d*35)
                         apuesta_min_d=apuesta_min_d-1
                         frec_abs_elegido[j] += 1
                     else: 
@@ -254,57 +254,61 @@ elif(estrategia=='f'):
 elif(estrategia=='o'):
   oscarsGrind()
 
-fig, axs1 = plt.subplots(2,figsize=(10,6))
+fig, axs1 = plt.subplots(2,2,figsize=(10,6))
 nGrafica = random.randint(0,cant_corridas-1)
 
 #Grafica Frecuencia Relativa
 
 if(num_elegido=='r'): 
-  axs1[0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-  axs1[0].bar(x,frec_rel_elegido[nGrafica],color='red',label='Frecuencia Relativa Real')
+  axs1[0][0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+  axs1[0][0].bar(x,frec_rel_elegido[nGrafica],color='red',label='Frecuencia Relativa Real')
 elif(num_elegido=='n'):
-  axs1[0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-  axs1[0].bar(x,frec_rel_elegido[nGrafica],color='black',label='Frecuencia Relativa Real')
+  axs1[0][0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+  axs1[0][0].bar(x,frec_rel_elegido[nGrafica],color='black',label='Frecuencia Relativa Real')
 else:
-  axs1[0].axhline(1/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-  axs1[0].bar(x,frec_rel_elegido[nGrafica],color='green',label='Frecuencia Relativa Real')
-axs1[0].legend(loc='upper right')
+  axs1[0][0].axhline(1/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+  axs1[0][0].bar(x,frec_rel_elegido[nGrafica],color='green',label='Frecuencia Relativa Real')
+axs1[0][0].legend(loc='upper right')
 
 
-axs1[0].set_title('Frecuencia relativa por tirada, Corrida: '+str(nGrafica+1))
-axs1[0].set_xlabel('Num tiradas')
-axs1[0].set_ylabel('frecuencia relativa')
+axs1[0][0].set_title('Frecuencia relativa Corrida: '+str(nGrafica+1))
+axs1[0][0].set_xlabel('Num tiradas')
+axs1[0][0].set_ylabel('frecuencia relativa')
 
 #Grafica Capital
 if(tipo_capital=='f'):
-  axs1[1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
+  axs1[1][0].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
 else:
-  axs1[1].axhline(0, color='red', linestyle='--', linewidth=1, label='Capital inicial')
-axs1[1].plot(x,capital[nGrafica])
-axs1[1].set_title('Gráfico Flujo de Capital Corrida: '+str(nGrafica+1))
-axs1[1].set_xlabel('Num tiradas')
-axs1[1].set_ylabel('Cantidad de capital')
+  axs1[1][0].axhline(0, color='red', linestyle='--', linewidth=1, label='Capital inicial')
+axs1[1][0].plot(x,capital[nGrafica])
+axs1[1][0].set_title('Flujo de Capital Corrida: '+str(nGrafica+1))
+axs1[1][0].set_xlabel('Num tiradas')
+axs1[1][0].set_ylabel('Cantidad de capital')
 
-fig2, axs2 = plt.subplots(2, figsize=(10,6))
+
+# fig2, axs2 = plt.subplots(2, figsize=(10,6))
 for i in range(0,cant_corridas):
     if(num_elegido=='r'): 
-      axs2[0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-      axs2[0].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
+      axs1[0][1].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+      axs1[0][1].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
     elif(num_elegido=='n'):
-      axs2[0].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-      axs2[0].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
+      axs1[0][1].axhline(18/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+      axs1[0][1].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
     else:
-      axs2[0].axhline(1/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
-      axs2[0].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
+      axs1[0][1].axhline(1/37, color='blue', linestyle='--', linewidth=1, label='Frecuencia Relativa Esperada')
+      axs1[0][1].bar(x,frec_rel_elegido[i],label='Frecuencia Relativa Real')
+    axs1[0][1].set_title('Frecuencia Relativa Total')
+    axs1[0][1].set_xlabel('Num tiradas')
+    axs1[0][1].set_ylabel('frecuencia relativa')
 
     if(tipo_capital=='f'):
-      axs2[1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
+      axs1[1][1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
     else:
-      axs2[1].axhline(0, color='red', linestyle='--', linewidth=1, label='Capital inicial')
-    axs2[1].plot(x,capital[i])    
-    axs2[1].set_title('Gráfico 1: Flujo de Capital')
-    axs2[1].set_xlabel('Num tiradas')
-    axs2[1].set_ylabel('Cantidad de capital')
+      axs1[1][1].axhline(0, color='red', linestyle='--', linewidth=1, label='Capital inicial')
+    axs1[1][1].plot(x,capital[i])    
+    axs1[1][1].set_title('Flujo de Capital Total')
+    axs1[1][1].set_xlabel('Num tiradas')
+    axs1[1][1].set_ylabel('Cantidad de capital')
 
 plt.tight_layout()
 plt.show()
