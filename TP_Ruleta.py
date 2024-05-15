@@ -54,7 +54,7 @@ for j in range(0,cant_corridas):
 
 fig, axs1 = plt.subplots(2,2,figsize=(10,6))
 
-axs1[0,0].plot(x,frec_rel_elegido[0],color='blue')
+axs1[0,0].bar(x,frec_rel_elegido[0],color='blue')
 axs1[0,0].set_title('Gráfico 1: Frecuencia relativa respecto a n')
 axs1[0,0].set_xlabel('Num tiradas')
 axs1[0,0].set_ylabel('frecuencia relativa')
