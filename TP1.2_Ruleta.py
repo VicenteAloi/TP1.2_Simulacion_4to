@@ -160,9 +160,7 @@ def fibonacci():
           capital.append([5000])
         else:
            capital.append([0])
-        apuesta_min=1
-        Act=1
-        Ant=0
+
 
         for i in range(1,len(x)):
             #genera num random y lo guarda en el array
@@ -300,7 +298,7 @@ for i in range(0,cant_corridas):
     axs1[0][1].set_title('Frecuencia Relativa Total')
     axs1[0][1].set_xlabel('Num tiradas')
     axs1[0][1].set_ylabel('frecuencia relativa')
-
+    # axs1[0][1].fill(False)
     if(tipo_capital=='f'):
       axs1[1][1].axhline(5000, color='red', linestyle='--', linewidth=1, label='Capital inicial')
     else:
